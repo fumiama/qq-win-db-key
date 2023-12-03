@@ -102,8 +102,8 @@ function hook(){
             let pk = args[__arg_index_pkey__].readByteArray(nk);
             console.log("¦- targetDB: " + args[__arg_index_db__]);
             console.log("¦- *zDb: " + args[__arg_index_zdb__].readUtf8String());
-            console.log("¦- *pkey: " + buf2str(pk);
-            console.log("¦- *pkey-hex: " + buf2hex(pk);
+            console.log("¦- *pkey: " + buf2str(pk));
+            console.log("¦- *pkey-hex: " + buf2hex(pk));
             console.log("¦- nKey: " + nk);
         },
     });
