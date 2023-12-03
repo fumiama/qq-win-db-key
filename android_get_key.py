@@ -1,30 +1,15 @@
-# OPTIONS
-
-PACKAGE = "com.tencent.mobileqq"
-
-# OPTIONS END
-
-print("仍在测试。")
-print("请先关闭 Magisk Hide 与 Shamiko")
-print("请先禁用 SELinux")
-print("请先打开 QQ 并登录，进入主界面，然后运行该脚本，等待数秒后退出登录并重新登录。")
-print("理论支持 Termux 与 桌面操作系统 运行")
-print("请勿使用 x86 或 x64 系统上的安卓模拟器。")
-print("适用版本：")
-print("https://downv6.qq.com/qqweb/QQ_1/android_apk/qq_8.9.58.11050_64.apk")
-print("https://github.com/Young-Lord/QQ-History-Backup/issues/9")
-print("""Termux 环境具体命令：
-sudo friendly # 重命名后的 frida-server
-python android_hook.py""")
-print("")
-
-print("可能需要彻底关闭 QQ 后运行，或者运行后重新登录")
 import frida
 import sys
 import platform
 import os
 import sys
 import subprocess
+
+# OPTIONS
+
+PACKAGE = "com.tencent.mobileqq"
+
+# OPTIONS END
 
 ON_TERMUX: bool = None
 def isOnTermux() -> bool:
@@ -42,7 +27,7 @@ def isOnTermux() -> bool:
 
 funcident = {
     '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
-    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA 81 3B FF D0 F3 03 03 2A F4 03 02 AA',
+    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA E0 03 03 AA E1 03 02 AA F3 03 04 AA',
 }
 
 
@@ -121,6 +106,22 @@ if __name__ == "__main__":
         print("usage: qq.version.number")
         print("supported version:", *funcident.keys())
         sys.exit(1)
+
+    print("仍在测试。")
+    print("请先关闭 Magisk Hide 与 Shamiko")
+    print("请先禁用 SELinux")
+    print("请先打开 QQ 并登录，进入主界面，然后运行该脚本，等待数秒后退出登录并重新登录。")
+    print("理论支持 Termux 与 桌面操作系统 运行")
+    print("请勿使用 x86 或 x64 系统上的安卓模拟器。")
+    print("适用版本：")
+    print("https://downv6.qq.com/qqweb/QQ_1/android_apk/qq_8.9.58.11050_64.apk")
+    print("https://github.com/Young-Lord/QQ-History-Backup/issues/9")
+    print("""Termux 环境具体命令：
+    sudo friendly # 重命名后的 frida-server
+    python android_hook.py""")
+    print("")
+    print("可能需要彻底关闭 QQ 后运行，或者运行后重新登录")
+
     if isOnTermux():
         device = frida.get_remote_device()
     else:
