@@ -100,6 +100,9 @@ function hook(){
             send("pattern NOT FOUND!!")
             send("!!exit")
         }
+        send("pattern found")
+        send(pattern)
+        send(akey_function_list)
         return akey_function_list[0]['address'];
     }
 
