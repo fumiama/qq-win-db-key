@@ -97,7 +97,7 @@ function hook(){
         return akey_function_list[0]['address'];
     }
 
-    const key_v2_function = single_function("FF 43 02 D1  FD 7B 03 A9 FC 6F 04 A9  FA 67 05 A9 F8 5F 06 A9    F6 57 07 A9 F4 4F 08 A9  FD C3 00 91 54 D0 3B D5    88 16 40 F9 F8 03 04 AA  F5 03 03 AA F6 03 02 AA")
+    const key_v2_function = single_function("FD 7B BD A9F6 57 01 A9 F4 4F 02 A9  FD 03 00 91 F6 03 01 AAF5 03 00 AA C1 49 FF 90  F3 03 03 2A F4 03 02 AA")
 
     // sqlite finalizer SELECT fts5 failed[{}]
     Interceptor.attach(key_v2_function, {
