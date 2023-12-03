@@ -111,23 +111,6 @@ function hook(){
     });
 }
 
-var hasHooked = false;
-send("Script loaded. Waiting for "+module_name+" to load...")
-const dlopen_process = {
-    onEnter: function (args) {
-        this.path = Memory.readUtf8String(args[0])
-        if (0) send("Loading " + this.path);
-    },
-    onLeave: function (retval) {
-        if (this.path.indexOf(module_name) !== -1 && !hasHooked) {
-            hasHooked = true;
-            if (1) send("Hooked!!");
-            hook();
-        }
-    }
-}
-try { Interceptor.attach(Module.findExportByName(null, "dlopen"), dlopen_process); } catch(err) { }
-try { Interceptor.attach(Module.findExportByName(null, "android_dlopen_ext"), dlopen_process); } catch(err) { }
 hook()
 """
 
