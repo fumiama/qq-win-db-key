@@ -124,6 +124,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in funcident:
         print("usage: qq.version.number")
         print("supported version:", funcident.keys())
+        sys.exit(1)
     if isOnTermux():
         device = frida.get_remote_device()
     else:
