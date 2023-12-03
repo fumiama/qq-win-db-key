@@ -42,12 +42,13 @@ def isOnTermux() -> bool:
 
 funcident = {
     '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
-    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA ?? ?? ?? ?? F3 03 03 2A F4 03 02 AA',
+    '8.9.63': 'FF 03 02 D1 FD 7B 02 A9 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 83 00 91 59 DO 3B D5',
 }
 
 
 jscode1 = """
 const module_name = "libkernel.so"
+const decoder = new TextDecoder();
 
 function hook(){
     function buf2hex(buffer) {
@@ -59,6 +60,9 @@ function hook(){
         hexParts.push(paddedHex);
       }
       return '0x' + hexParts.join(', 0x');
+    }
+    function buf2str(buffer) {
+        return decoder.decode(buffer);
     }
     var kernel_util = null;
     var process_Obj_Module_Arr = Process.enumerateModules();
@@ -94,11 +98,13 @@ function hook(){
 
     if(key_v2_function != null) Interceptor.attach(key_v2_function, {
         onEnter: function(args) {
-            console.log("¦- targetDB: " + args[0]);
-            console.log("¦- *zDb: " + args[1].readUtf8String());
-            console.log("¦- *pkey: " + args[2].readByteArray(args[3].toInt32()));
-            console.log("¦- *pkey-hex: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
-            console.log("¦- nKey: " + args[3].toInt32());
+            let nk = args[__arg_index_nkey__].toInt32();
+            let pk = args[__arg_index_pkey__].readByteArray(nk);
+            console.log("¦- targetDB: " + args[__arg_index_db__]);
+            console.log("¦- *zDb: " + args[__arg_index_zdb__].readUtf8String());
+            console.log("¦- *pkey: " + buf2str(pk);
+            console.log("¦- *pkey-hex: " + buf2hex(pk);
+            console.log("¦- nKey: " + );
         },
     });
 }
@@ -123,6 +129,10 @@ if __name__ == "__main__":
     else:
         running = True
     jscode1 = jscode1.replace("__single_function__parameter__", funcident[sys.argv[1]])
+    jscode1 = jscode1.replace("__arg_index_db__", 0 if sys.argv[1] == "8.9.58" else 2)
+    jscode1 = jscode1.replace("__arg_index_zdb__", 1 if sys.argv[1] == "8.9.58" else 3)
+    jscode1 = jscode1.replace("__arg_index_pkey__", 2 if sys.argv[1] == "8.9.58" else 4)
+    jscode1 = jscode1.replace("__arg_index_nkey__", 3 if sys.argv[1] == "8.9.58" else 5)
     if running:
         print(PACKAGE+" is already running", pid)
         session = device.attach(pid)
