@@ -42,7 +42,7 @@ def isOnTermux() -> bool:
 
 funcident = {
     '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
-    '8.9.63': 'FF 03 02 D1 FD 7B 02 A9 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 83 00 91 59 D0 3B D5',
+    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA 81 3B FF D0 F3 03 03 2A F4 03 02 AA',
 }
 
 
@@ -133,10 +133,10 @@ if __name__ == "__main__":
     else:
         running = True
     jscode1 = jscode1.replace("__single_function__parameter__", funcident[sys.argv[1]])
-    jscode1 = jscode1.replace("__arg_index_db__",   "0" if sys.argv[1] == "8.9.58" else "2")
-    jscode1 = jscode1.replace("__arg_index_zdb__",  "1" if sys.argv[1] == "8.9.58" else "3")
-    jscode1 = jscode1.replace("__arg_index_pkey__", "2" if sys.argv[1] == "8.9.58" else "4")
-    jscode1 = jscode1.replace("__arg_index_nkey__", "3" if sys.argv[1] == "8.9.58" else "5")
+    jscode1 = jscode1.replace("__arg_index_db__",   "0")
+    jscode1 = jscode1.replace("__arg_index_zdb__",  "1")
+    jscode1 = jscode1.replace("__arg_index_pkey__", "2")
+    jscode1 = jscode1.replace("__arg_index_nkey__", "3")
     if running:
         print(PACKAGE+" is already running", pid)
         session = device.attach(pid)
