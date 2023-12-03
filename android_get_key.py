@@ -42,7 +42,7 @@ def isOnTermux() -> bool:
 
 funcident = {
     '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
-    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA 81 3B FF DO F3 03 03 2A F4 03 02 AA',
+    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA ?? ?? ?? ?? F3 03 03 2A F4 03 02 AA',
 }
 
 
@@ -77,23 +77,22 @@ function hook(){
 
     function single_function(pattern) {
         pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
-        send("pattern: " + pattern)
+        send("Pattern: " + pattern)
         var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
         if (akey_function_list.length == 0) {
-            send("pattern NOT FOUND!!")
-            send("!!exit")
+            send("Pattern NOT FOUND!! EXIT!!")
             return null;
         }
         if (akey_function_list.length > 1) {
-            send("pattern FOUND MULTI!! take first item")
+            send("Multi-pattern FOUND!! Take first item.")
         }
-        send("attach key_v2_function addr: " + akey_function_list[0]['address'])
+        send("Attach key_v2_function addr: " + akey_function_list[0]['address'])
         return akey_function_list[0]['address'];
     }
 
     const key_v2_function = single_function("__single_function__parameter__")
 
-    Interceptor.attach(key_v2_function, {
+    if(key_v2_function != null) Interceptor.attach(key_v2_function, {
         onEnter: function(args) {
             console.log("¦- targetDB: " + args[0]);
             console.log("¦- *zDb: " + args[1].readUtf8String());
@@ -109,7 +108,7 @@ hook()
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in funcident:
         print("usage: qq.version.number")
-        print("supported version:", funcident.keys())
+        print("supported version:", *funcident.keys())
         sys.exit(1)
     if isOnTermux():
         device = frida.get_remote_device()
