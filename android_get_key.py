@@ -102,18 +102,11 @@ function hook(){
     // sqlite finalizer SELECT fts5 failed[{}]
     Interceptor.attach(key_v2_function, {
         onEnter: function(args) {
-            var dbName = funcName(args[0], NULL).readUtf8String();
-            if (dbName.replaceAll('/', '\\\\').split('\\\\').pop().toLowerCase() == 'nt_msg.db'.toLowerCase() || true) {
-                target_db = args[0];
-                //console.log("¦- db: " + args[0]);
-                console.log("¦- nKey: " + args[3].toInt32());
-                //console.log("¦- pkey: " + args[2]);
-                console.log("¦- *pkey: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
-                // console.log("¦- dbName: " + funcName(args[0], NULL).readUtf8String());
-                console.log("¦- dbName: " + "<not implemented>");
-                console.log("¦- *zDb: " + args[1].readUtf8String());
-                //console.log("¦- *pkey: " + buf2hex(Memory.readByteArray(new UInt64(args[2]), args[3])));
-            }
+            target_db = args[0];
+            console.log("¦- nKey: " + args[3].toInt32());
+            console.log("¦- *pkey: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
+            console.log("¦- dbName: " + "<not implemented>");
+            console.log("¦- *zDb: " + args[1].readUtf8String());
         },
     });
 }
