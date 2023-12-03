@@ -104,7 +104,7 @@ function hook(){
             console.log("¦- *zDb: " + args[__arg_index_zdb__].readUtf8String());
             console.log("¦- *pkey: " + buf2str(pk);
             console.log("¦- *pkey-hex: " + buf2hex(pk);
-            console.log("¦- nKey: " + );
+            console.log("¦- nKey: " + nk);
         },
     });
 }
