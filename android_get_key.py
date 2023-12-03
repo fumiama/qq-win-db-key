@@ -42,7 +42,7 @@ def isOnTermux() -> bool:
 
 funcident = {
     '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
-    '8.9.63': '21 7C 19 91 00 01 80 52 E2 03 15 AA E3 03 16 AA E4 5F 00 94 B5 01 00 B4 94 01 00 B4 73 01 00 34 E0 03 15 AA',
+    '8.9.63': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA 81 3B FF DO F3 03 03 2A F4 03 02 AA',
 }
 
 
@@ -91,10 +91,9 @@ function hook(){
         pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
         var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
         if (akey_function_list.length > 1) {
-            send("pattern FOUND MULTI!!")
+            send("pattern FOUND MULTI!! take first item")
             send(pattern)
             send(akey_function_list)
-            send("!!exit")
         }
         if (akey_function_list.length == 0) {
             send("pattern NOT FOUND!!")
