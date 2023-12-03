@@ -129,10 +129,10 @@ if __name__ == "__main__":
     else:
         running = True
     jscode1 = jscode1.replace("__single_function__parameter__", funcident[sys.argv[1]])
-    jscode1 = jscode1.replace("__arg_index_db__", 0 if sys.argv[1] == "8.9.58" else 2)
-    jscode1 = jscode1.replace("__arg_index_zdb__", 1 if sys.argv[1] == "8.9.58" else 3)
-    jscode1 = jscode1.replace("__arg_index_pkey__", 2 if sys.argv[1] == "8.9.58" else 4)
-    jscode1 = jscode1.replace("__arg_index_nkey__", 3 if sys.argv[1] == "8.9.58" else 5)
+    jscode1 = jscode1.replace("__arg_index_db__",   "0" if sys.argv[1] == "8.9.58" else "2")
+    jscode1 = jscode1.replace("__arg_index_zdb__",  "1" if sys.argv[1] == "8.9.58" else "3")
+    jscode1 = jscode1.replace("__arg_index_pkey__", "2" if sys.argv[1] == "8.9.58" else "4")
+    jscode1 = jscode1.replace("__arg_index_nkey__", "3" if sys.argv[1] == "8.9.58" else "5")
     if running:
         print(PACKAGE+" is already running", pid)
         session = device.attach(pid)
