@@ -102,7 +102,7 @@ function hook(){
     // sqlite finalizer SELECT fts5 failed[{}]
     Interceptor.attach(key_v2_function, {
         onEnter: function(args) {
-            /*var dbName = funcName(args[0], NULL).readUtf8String();*/
+            var dbName = funcName(args[0], NULL).readUtf8String();
             if (dbName.replaceAll('/', '\\\\').split('\\\\').pop().toLowerCase() == 'nt_msg.db'.toLowerCase() || true) {
                 target_db = args[0];
                 //console.log("¦- db: " + args[0]);
