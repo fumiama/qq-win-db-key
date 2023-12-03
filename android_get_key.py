@@ -48,21 +48,25 @@ funcident = {
 
 jscode1 = """
 const module_name = "libkernel.so"
-const decoder = new TextDecoder();
 
 function hook(){
     function buf2hex(buffer) {
       const byteArray = new Uint8Array(buffer);
       const hexParts = [];
-      for(let i = 0; i < byteArray.length; i++) {
-        const hex = byteArray[i].toString(16);
-        const paddedHex = ('00' + hex).slice(-2);
-        hexParts.push(paddedHex);
-      }
-      return '0x' + hexParts.join(', 0x');
+        for(let i = 0; i < byteArray.length; i++) {
+            const hex = byteArray[i].toString(16);
+            const paddedHex = ('00' + hex).slice(-2);
+            hexParts.push(paddedHex);
+        }
+        return '0x' + hexParts.join(', 0x');
     }
     function buf2str(buffer) {
-        return decoder.decode(buffer);
+        let result = "";
+        const byteArray = new Uint8Array(buffer);
+        for (let i = 0; i < byteArray.length; i++) {
+            result += String.fromCharCode(byteArray[i]);
+        }
+        return result;
     }
     var kernel_util = null;
     var process_Obj_Module_Arr = Process.enumerateModules();
