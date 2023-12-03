@@ -23,6 +23,7 @@ import frida
 import sys
 import platform
 import os
+import sys
 import subprocess
 
 ON_TERMUX: bool = None
@@ -38,6 +39,11 @@ def isOnTermux() -> bool:
         return True
     ON_TERMUX = False
     return False
+
+funcident = {
+    '8.9.58': 'FD 7B BD A9 F6 57 01 A9 F4 4F 02 A9 FD 03 00 91 F6 03 01 AA F5 03 00 AA C1 49 FF 90 F3 03 03 2A F4 03 02 AA',
+    '8.9.63': '21 7C 19 91 00 01 80 52 E2 03 15 AA E3 03 16 AA E4 5F 00 94 B5 01 00 B4 94 01 00 B4 73 01 00 34 E0 03 15 AA',
+}
 
 
 jscode1 = """
@@ -97,7 +103,7 @@ function hook(){
         return akey_function_list[0]['address'];
     }
 
-    const key_v2_function = single_function("FF C3 01 D1 FD 7B 01 A9    FB 13 00 F9 FA 67 03 A9  F8 5F 04 A9 F6 57 05 A9    F4 4F 06 A9 FD 43 00 91  59 D0 3B D5 28 17 40 F9")
+    const key_v2_function = single_function("__single_function__parameter__")
 
     // sqlite finalizer SELECT fts5 failed[{}]
     Interceptor.attach(key_v2_function, {
@@ -115,6 +121,9 @@ hook()
 """
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2 or sys.argv[1] not in funcident:
+        print("usage: qq.version.number")
+        print("supported version:", funcident.keys())
     if isOnTermux():
         device = frida.get_remote_device()
     else:
@@ -126,7 +135,7 @@ if __name__ == "__main__":
         running = False
     else:
         running = True
-    # running=True;pid=3445
+    jscode1 = jscode1.replace("__single_function__parameter__", funcident[sys.argv[1]])
     if running:
         print(PACKAGE+" is already running", pid)
         session = device.attach(pid)
