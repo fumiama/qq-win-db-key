@@ -49,18 +49,6 @@ funcident = {
 jscode1 = """
 const module_name = "libkernel.so"
 
-const TARGET_KEY_LENGTH = 16;
-var key_length = 0;
-var dbName;
-const new_database_handle = Memory.alloc(128)
-var new_database_handle_point_to;
-const new_database_name = Memory.alloc(2048)
-var empty_password = Memory.alloc(TARGET_KEY_LENGTH)
-var original_password = Memory.alloc(TARGET_KEY_LENGTH)
-empty_password.writeByteArray(Array(TARGET_KEY_LENGTH).fill(0))
-var target_db;
-
-
 function hook(){
     function buf2hex(buffer) {
       const byteArray = new Uint8Array(buffer);
@@ -89,6 +77,7 @@ function hook(){
 
     function single_function(pattern) {
         pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
+        send("pattern: " + pattern)
         var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
         if (akey_function_list.length == 0) {
             send("pattern NOT FOUND!!")
