@@ -96,7 +96,8 @@ function hook(){
         onEnter: function(args) {
             console.log("¦- targetDB: " + args[0]);
             console.log("¦- *zDb: " + args[1].readUtf8String());
-            console.log("¦- *pkey: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
+            console.log("¦- *pkey: " + args[2].readByteArray(args[3].toInt32()));
+            console.log("¦- *pkey-hex: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
             console.log("¦- nKey: " + args[3].toInt32());
         },
     });
