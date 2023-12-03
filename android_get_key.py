@@ -90,31 +90,26 @@ function hook(){
     function single_function(pattern) {
         pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
         var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
-        if (akey_function_list.length > 1) {
-            send("pattern FOUND MULTI!! take first item")
-            send(pattern)
-            send(akey_function_list)
-        }
         if (akey_function_list.length == 0) {
             send("pattern NOT FOUND!!")
             send("!!exit")
+            return null;
         }
-        send("pattern found")
-        send(pattern)
-        send(akey_function_list)
+        if (akey_function_list.length > 1) {
+            send("pattern FOUND MULTI!! take first item")
+        }
+        send("attach key_v2_function addr: " + akey_function_list[0]['address'])
         return akey_function_list[0]['address'];
     }
 
     const key_v2_function = single_function("__single_function__parameter__")
 
-    // sqlite finalizer SELECT fts5 failed[{}]
     Interceptor.attach(key_v2_function, {
         onEnter: function(args) {
-            target_db = args[0];
-            console.log("¦- nKey: " + args[3].toInt32());
-            console.log("¦- *pkey: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
-            console.log("¦- dbName: " + "<not implemented>");
+            console.log("¦- targetDB: " + args[0]);
             console.log("¦- *zDb: " + args[1].readUtf8String());
+            console.log("¦- *pkey: " + buf2hex(args[2].readByteArray(args[3].toInt32())));
+            console.log("¦- nKey: " + args[3].toInt32());
         },
     });
 }
