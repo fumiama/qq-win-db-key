@@ -65,39 +65,38 @@ function hook(){
         console.log("文件系统路径",process_Obj_Module_Arr[i].path);
         kernel_util = process_Obj_Module_Arr[i];
     }}
-    if(kernel_util == null){
+    if(kernel_util == null) {
         send("libkernel.so not loaded. exit.")
-        raise_a_error()
-    }
-
-    function single_function(pattern) {
-        pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
-        send("Pattern: " + pattern)
-        var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
-        if (akey_function_list.length == 0) {
-            send("Pattern NOT FOUND!! EXIT!!")
-            return null;
+    } else {
+        function single_function(pattern) {
+            pattern = pattern.replaceAll("##", "").replaceAll(" ", "").toLowerCase().replace(/\\s/g,'').replace(/(.{2})/g,"$1 ");
+            send("Pattern: " + pattern)
+            var akey_function_list = Memory.scanSync(kernel_util.base, kernel_util.size, pattern);
+            if (akey_function_list.length == 0) {
+                send("Pattern NOT FOUND!! EXIT!!")
+                return null;
+            }
+            if (akey_function_list.length > 1) {
+                send("Multi-pattern FOUND!! Take first item.")
+            }
+            send("Attach key_v2_function addr: " + akey_function_list[0]['address'])
+            return akey_function_list[0]['address'];
         }
-        if (akey_function_list.length > 1) {
-            send("Multi-pattern FOUND!! Take first item.")
-        }
-        send("Attach key_v2_function addr: " + akey_function_list[0]['address'])
-        return akey_function_list[0]['address'];
+
+        const key_v2_function = single_function("__single_function__parameter__")
+
+        if(key_v2_function != null) Interceptor.attach(key_v2_function, {
+            onEnter: function(args) {
+                let nk = args[__arg_index_nkey__].toInt32();
+                let pk = args[__arg_index_pkey__].readByteArray(nk);
+                console.log("¦- targetDB: " + args[__arg_index_db__]);
+                console.log("¦- *zDb: " + args[__arg_index_zdb__].readUtf8String());
+                console.log("¦- *pkey: " + buf2str(pk));
+                console.log("¦- *pkey-hex: " + buf2hex(pk));
+                console.log("¦- nKey: " + nk);
+            },
+        });
     }
-
-    const key_v2_function = single_function("__single_function__parameter__")
-
-    if(key_v2_function != null) Interceptor.attach(key_v2_function, {
-        onEnter: function(args) {
-            let nk = args[__arg_index_nkey__].toInt32();
-            let pk = args[__arg_index_pkey__].readByteArray(nk);
-            console.log("¦- targetDB: " + args[__arg_index_db__]);
-            console.log("¦- *zDb: " + args[__arg_index_zdb__].readUtf8String());
-            console.log("¦- *pkey: " + buf2str(pk));
-            console.log("¦- *pkey-hex: " + buf2hex(pk));
-            console.log("¦- nKey: " + nk);
-        },
-    });
 }
 
 hook()
@@ -130,7 +129,8 @@ if __name__ == "__main__":
         device = frida.get_usb_device()
     try:
         pid = int(subprocess.check_output(
-            "su -c pidof "+PACKAGE, shell=True).decode().strip())
+                "su -c pidof "+PACKAGE, shell=True).decode().strip()
+            ) if ON_TERMUX else device.get_frontmost_application().pid
     except subprocess.CalledProcessError:
         running = False
     else:
